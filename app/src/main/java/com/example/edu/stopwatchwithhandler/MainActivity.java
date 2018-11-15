@@ -9,12 +9,14 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    Button mButtonStart, mButtonPause, mButtonReset;
-    TextView mTextview;
+    Button mButtonStart, mButtonPause, mButtonReset, mButtonLap;
+    TextView mTextview, mTextviewLap;
     Handler handler = new Handler();
     private long millisecondTime, timeBuff, updateTime;
     private int seconds, minutes, milliSeconds;
     private long startTime= 0;
+    private String time=null;
+    private StringBuffer lap=new StringBuffer();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,11 +26,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mButtonStart = findViewById(R.id.buttonStart);
         mButtonPause = findViewById(R.id.buttonPause);
         mButtonReset = findViewById(R.id.buttonReset);
-        mTextview = findViewById(R.id.textView);
+        mTextview=findViewById(R.id.textView);
+        mButtonLap = findViewById(R.id.buttonLap);
+        mTextviewLap = findViewById(R.id.textviewLap);
 
         mButtonStart.setOnClickListener(this);
         mButtonPause.setOnClickListener(this);
         mButtonReset.setOnClickListener(this);
+        mButtonLap.setOnClickListener(this);
     }
 
     @Override
@@ -47,6 +52,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mTextview.setText("00 : 00 : 000");
                 //mButtonStart.callOnClick();
                 break;
+            case R.id.buttonLap:
+
+                lap.append(time + "\n");
+                mTextviewLap.setText(lap);
+                break;
         }
 
     }
@@ -60,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             minutes = seconds / 60;
             seconds = seconds % 60;
             milliSeconds = (int) (updateTime % 1000);
-            String time = String.format("%02d : %02d : %03d ", minutes, seconds, milliSeconds);
+            time = String.format("%02d : %02d : %03d ", minutes, seconds, milliSeconds);
             mTextview.setText(time);
            handler.post(this);
         }
